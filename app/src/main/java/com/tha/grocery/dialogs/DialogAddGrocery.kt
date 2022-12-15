@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.tha.grocery.R
+import com.tha.grocery.mvp.presenters.MainPresenter
+import com.tha.grocery.mvp.presenters.impls.MainPresenterImpl
+import kotlinx.android.synthetic.main.dialog_add_grocery.*
 import kotlinx.android.synthetic.main.dialog_add_grocery.view.*
 
 class GroceryDialogFragment : DialogFragment() {
@@ -18,15 +22,37 @@ class GroceryDialogFragment : DialogFragment() {
         }
     }
 
+    private lateinit var mPresenter: MainPresenter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.dialog_add_grocery, container, false)
-        view.btnAddGrocery.setOnClickListener {
-            dismiss()
-        }
+
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpPresenter()
+
+        view.btnAddGrocery.setOnClickListener {
+            mPresenter.onTapAddGrocery(
+                etGroceryName.text.toString(),
+                etDescription.text.toString(),
+                etAmount.text.toString()
+            )
+            dismiss()
+        }
+    }
+
+    private fun setUpPresenter() {
+        activity?.let {
+            mPresenter = ViewModelProvider(this)[MainPresenterImpl::class.java]
+        }
+    }
+
 }
