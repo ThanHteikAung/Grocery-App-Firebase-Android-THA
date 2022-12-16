@@ -66,6 +66,10 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
     }
 
     override fun deleteGrocery(name: String) {
-
+        db.collection("groceries")
+            .document(name)
+            .delete()
+            .addOnSuccessListener { Log.d("Success", "Successfully deleted grocery") }
+            .addOnFailureListener { Log.d("Failure", "Failed to delete grocery") }
     }
 }
