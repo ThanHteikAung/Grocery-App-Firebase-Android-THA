@@ -13,6 +13,10 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
         mGroceryModel.addGrocery(name,description,amount)
     }
 
+    override fun onTapDeleteGrocery(name: String) {
+        mGroceryModel.deleteGrocery(name)
+    }
+
     override fun onUiReady(owner: LifecycleOwner) {
         mGroceryModel.getGroceries(
             onSuccess = {

@@ -5,18 +5,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.tha.grocery.mvp.presenters.MainPresenter
 import com.tha.grocery.R
-import com.tha.grocery.mvp.views.MainView
 import com.tha.grocery.adapters.GroceryAdapter
 import com.tha.grocery.data.vos.GroceryVO
 import com.tha.grocery.dialogs.GroceryDialogFragment
+import com.tha.grocery.mvp.presenters.MainPresenter
 import com.tha.grocery.mvp.presenters.impls.MainPresenterImpl
+import com.tha.grocery.mvp.views.MainView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), MainView {
 
-    private val mAdapter: GroceryAdapter = GroceryAdapter()
+    private lateinit var mAdapter: GroceryAdapter
     private lateinit var mPresenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +43,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     private fun setUpRecyclerView() {
+        mAdapter = GroceryAdapter(mPresenter)
         rvGroceries.adapter = mAdapter
         rvGroceries.layoutManager =
             LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)

@@ -1,4 +1,4 @@
-package com.zg.burgerjoint.viewholders
+package com.tha.grocery.view.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
