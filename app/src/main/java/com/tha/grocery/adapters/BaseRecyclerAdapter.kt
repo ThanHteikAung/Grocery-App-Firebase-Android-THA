@@ -2,7 +2,7 @@ package com.tha.grocery.adapters
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
-import com.zg.burgerjoint.viewholders.BaseViewHolder
+import com.tha.grocery.view.viewholders.BaseViewHolder
 
 abstract class BaseRecyclerAdapter<T : BaseViewHolder<W>, W> : RecyclerView.Adapter<T>() {
 
