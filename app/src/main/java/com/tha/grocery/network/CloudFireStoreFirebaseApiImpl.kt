@@ -13,7 +13,7 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
         onSuccess: (groceries: List<GroceryVO>) -> Unit,
         onFailure: (String) -> Unit
     ) {
-        db.collection("groceries")
+        /*db.collection("groceries")
             .get()
             .addOnSuccessListener { result ->
                 val groceriesList: MutableList<GroceryVO> = arrayListOf()
@@ -29,6 +29,26 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
             }
             .addOnFailureListener { exception ->
                 onFailure(exception.message ?: "Please check connection")
+            }*/
+
+        db.collection("groceries")
+            .addSnapshotListener { value, error ->
+                error?.let {
+                    onFailure(it.message ?: "Please check connection")
+                } ?: run {
+                    val groceriesList: MutableList<GroceryVO> = arrayListOf()
+                    val result = value?.documents ?: arrayListOf()
+                    for (document in result) {
+                        val data = document.data
+                        val grocery = GroceryVO()
+                        grocery.name = data?.get("name") as String
+                        grocery.description = data["description"] as String
+                        grocery.amount = data["amount"] as String
+                        groceriesList.add(grocery)
+                    }
+                    onSuccess(groceriesList)
+                }
+
             }
     }
 
