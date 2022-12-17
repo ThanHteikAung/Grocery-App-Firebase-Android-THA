@@ -10,7 +10,11 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TableLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -53,6 +57,20 @@ class MainActivity : BaseActivity(), MainView {
 
         mPresenter.onUiReady(this, this)
 
+        addCrashButton()
+
+    }
+
+    private fun addCrashButton(){
+        val crashButton = Button(this)
+        crashButton.text = "Crash!"
+        crashButton.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
+        addContentView(crashButton, ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT))
     }
 
     private fun setUpPresenter() {

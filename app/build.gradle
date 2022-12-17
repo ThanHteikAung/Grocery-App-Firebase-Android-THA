@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -68,4 +69,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
 
     implementation 'com.google.firebase:firebase-config-ktx'
+
+    implementation 'com.google.firebase:firebase-crashlytics'
+
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
+
 }
