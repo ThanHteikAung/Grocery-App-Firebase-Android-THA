@@ -2,12 +2,12 @@ package com.tha.grocery.data.modals
 
 import android.graphics.Bitmap
 import com.tha.grocery.data.vos.GroceryVO
+import com.tha.grocery.network.CloudFireStoreFirebaseApiImpl
 import com.tha.grocery.network.FirebaseApi
-import com.tha.grocery.network.RealtimeDatabaseFirebaseApiImpl
 
 object GroceryModelImpl : GroceryModel {
-    override var mFirebaseApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
-    //override var mFirebaseApi: FirebaseApi = CloudFireStoreFirebaseApiImpl
+    //override var mFirebaseApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
+    override var mFirebaseApi: FirebaseApi = CloudFireStoreFirebaseApiImpl
 
     override fun getGroceries(onSuccess: (List<GroceryVO>) -> Unit, onFailure: (String) -> Unit) {
         mFirebaseApi.getGroceries(onSuccess, onFailure)

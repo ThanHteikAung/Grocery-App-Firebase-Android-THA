@@ -4,11 +4,15 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.tha.grocery.data.vos.GroceryVO
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 object CloudFireStoreFirebaseApiImpl : FirebaseApi {
 
     val db = Firebase.firestore
+    private val storage = FirebaseStorage.getInstance()
 
     override fun getGroceries(
         onSuccess: (groceries: List<GroceryVO>) -> Unit,
@@ -45,6 +49,7 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
                         grocery.name = data?.get("name") as String
                         grocery.description = data["description"] as String
                         grocery.amount = data["amount"] as String
+                        grocery.image = data["image"] as String?
                         groceriesList.add(grocery)
                     }
                     onSuccess(groceriesList)
@@ -57,7 +62,8 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
         val groceryMap = hashMapOf(
             "name" to name,
             "description" to description,
-            "amount" to amount
+            "amount" to amount,
+            "image" to image
         )
         db.collection("groceries")
             .document(name)
@@ -75,6 +81,24 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
     }
 
     override fun uploadImageAndEditGrocery(image: Bitmap, grocery: GroceryVO) {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
 
+        val data = baos.toByteArray()
+        val imageRef = storage.reference.child("images/${UUID.randomUUID()}")
+        imageRef.putBytes(data)
+            .addOnFailureListener { }
+            .addOnSuccessListener { }
+            .continueWithTask {
+                return@continueWithTask imageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                val imageUrl = task.result?.toString()
+                addGrocery(
+                    grocery.name ?: "",
+                    grocery.description ?: "",
+                    grocery.amount ?: "",
+                    imageUrl ?: ""
+                )
+            }
     }
 }
