@@ -1,6 +1,7 @@
 package com.tha.grocery.view.viewholders
 
 import android.view.View
+import com.bumptech.glide.Glide
 import com.tha.grocery.data.vos.GroceryVO
 import com.tha.grocery.delegates.GroceryViewItemDelegate
 import kotlinx.android.synthetic.main.view_holder_grocery_item.view.*
@@ -24,5 +25,13 @@ class GroceryViewHolder(itemView: View, private val mDelegate: GroceryViewItemDe
                 data.amount ?: ""
             )
         }
+
+        itemView.btnFileUpload.setOnClickListener {
+            mDelegate.onTapFileUpload(data)
+        }
+
+        Glide.with(itemView.context)
+            .load(data.image)
+            .into(itemView.ivGroceryImage)
     }
 }
