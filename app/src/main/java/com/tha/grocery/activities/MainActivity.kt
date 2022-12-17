@@ -9,10 +9,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.tha.grocery.R
+import com.tha.grocery.adapters.GridGroceryAdapter
 import com.tha.grocery.adapters.GroceryAdapter
 import com.tha.grocery.data.vos.GroceryVO
 import com.tha.grocery.dialogs.GroceryDialogFragment
@@ -28,11 +31,12 @@ import java.io.IOException
 class MainActivity : BaseActivity(), MainView {
 
     private lateinit var mAdapter: GroceryAdapter
+    private lateinit var mGridGroceryAdapter: GridGroceryAdapter
     private lateinit var mPresenter: MainPresenter
 
     companion object {
 
-        fun newIntent(context: Context) : Intent{
+        fun newIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
     }
@@ -43,10 +47,12 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(findViewById(R.id.toolbar))
         setUpPresenter()
         setUpRecyclerView()
+        setUpGridRecyclerView()
 
         setUpActionListeners()
 
         mPresenter.onUiReady(this)
+
     }
 
     private fun setUpPresenter() {
@@ -67,6 +73,13 @@ class MainActivity : BaseActivity(), MainView {
             LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
     }
 
+    private fun setUpGridRecyclerView() {
+        mGridGroceryAdapter = GridGroceryAdapter(mPresenter)
+        rvGridGroceries.adapter = mGridGroceryAdapter
+        rvGridGroceries.layoutManager =
+            GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -81,6 +94,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun showGroceryData(groceryList: List<GroceryVO>) {
         mAdapter.setNewData(groceryList)
+        mGridGroceryAdapter.setNewData(groceryList)
     }
 
     override fun showErrorMessage(message: String) {
@@ -132,5 +146,19 @@ class MainActivity : BaseActivity(), MainView {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         resultLauncher.launch(Intent.createChooser(intent, "Select Picture"))
+    }
+
+    override fun displayToolbarTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
+    override fun displayGirdView(number: Int) {
+        if (number == 0) {
+            rvGroceries.visibility = View.VISIBLE
+            rvGridGroceries.visibility = View.GONE
+        } else {
+            rvGroceries.visibility = View.GONE
+            rvGridGroceries.visibility = View.VISIBLE
+        }
     }
 }
