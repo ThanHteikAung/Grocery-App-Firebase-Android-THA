@@ -1,6 +1,7 @@
 package com.tha.grocery.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
@@ -30,7 +31,10 @@ class MainActivity : BaseActivity(), MainView {
     private lateinit var mPresenter: MainPresenter
 
     companion object {
-        const val PICK_IMAGE_REQUEST = 1111
+
+        fun newIntent(context: Context) : Intent{
+            return Intent(context, MainActivity::class.java)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
